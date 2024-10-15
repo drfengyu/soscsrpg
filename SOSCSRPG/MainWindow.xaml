@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SOSCSRPG"
         xmlns:AduSkin="clr-namespace:AduSkin.Controls.Metro;assembly=AduSkin"
+        xmlns:vm="clr-namespace:Engine.ViewModels;assembly=Engine"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:GameSession}"             
         Title="SOSCSRPG" Height="768" Width="1024">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>

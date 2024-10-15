@@ -21,6 +21,7 @@ namespace Engine.Factories
                 Description= "There are rows of corn growing here, with giant rats hiding between them.",
                 ImageName= "/Engine;component/Images/Locations/FarmFields.png"
             });
+            world.LocationAt(-2, -1).AddMonster(2,100);
             world.AddLocation(new Location()
             {
                 XCoordinate = -1,
@@ -70,6 +71,7 @@ namespace Engine.Factories
                 Description = "The trees in this forest are covered with spider webs.",
                 ImageName = "/Engine;component/Images/Locations/SpiderForest.png"
             });
+            world.LocationAt(2, 0).AddMonster(3,100);
             world.AddLocation(new Location()
             {
                 XCoordinate = 0,
@@ -87,6 +89,7 @@ namespace Engine.Factories
                 Description = "There are many plants here, with snakes hiding behind them.",
                 ImageName = "/Engine;component/Images/Locations/HerbalistsGarden.png"
             });
+            world.LocationAt(0, 2).AddMonster(1,100);
             return world;
         }
     }

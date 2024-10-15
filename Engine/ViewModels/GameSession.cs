@@ -16,6 +16,7 @@ namespace Engine.ViewModels
     public class GameSession:BaseNotificationClass
     {
         private Location currentLocation;
+        private Monster currentMonster;
 
         public Player CurrentPlayer { get; set;  }
         public Location CurrentLocation { get => currentLocation;
@@ -27,10 +28,18 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToWest));
                 OnPropertyChanged(nameof(HasLocationToEast));
                 GivePlayerQuestsAtLocation();
+                GetMonsterAtLocation();
             }
         }
 
-        
+        public Monster CurrentMonster { get => currentMonster;
+            set { currentMonster = value;
+                OnPropertyChanged(nameof(CurrentMonster));
+                OnPropertyChanged(nameof(HasMonster));
+            }
+        }
+
+        public bool HasMonster => CurrentMonster != null;
 
         public bool HasLocationToNorth { 
             get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; }
@@ -48,14 +57,14 @@ namespace Engine.ViewModels
             get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null; }
         }
 
-
+       
 
         public World CurrentWorld { set; get; }
         public GameSession() {
             CurrentPlayer = new Player
             {
                 Name = "Scott",
-                Gold = 1000000,
+                Gold = 100,
                 CharacterClass = "Fighter",
                 HitPoints = 10,
                 ExperiencePoints = 0,
@@ -63,17 +72,6 @@ namespace Engine.ViewModels
                 
             };
 
-            //CurrentLocation = new Location
-            //{
-            //    Name = "Home",
-            //    XCoordinate = 0,
-            //    YCoordinate = -1,
-            //    Description = "This is your House.",
-            //    ImageName = "/Engine;component/Images/Locations/Home.png"
-            //};
-
-
-            
             CurrentWorld=WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
             CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
@@ -120,5 +118,12 @@ namespace Engine.ViewModels
                 }
             }
         }
+
+        private void GetMonsterAtLocation()
+        {
+            CurrentMonster = CurrentLocation.GetMonster();
+        }
+
+
     }
 }
