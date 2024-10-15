@@ -1,52 +1,42 @@
-# Prerequisites
-*.d
+# Visual Studio相关
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+# svn
+.svn/
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# 编译输出
+bin/
+obj/
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# NuGet包
+*.nupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
 
-# Precompiled Headers
-*.gch
-*.pch
+# 锁文件
+project.lock.json
+project.fragment.lock.json
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# 样式和排版
+*.ide/workspace.xml
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# 临时文件
+*.tmp
+*.temp
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# 部署相关
+publish/
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# 外部工具
+_ReSharper.Caches/
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# 文件历史
+.history/
+
+# 本地环境设置
+*.local.json
+
