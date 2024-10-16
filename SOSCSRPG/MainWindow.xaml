@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:Engine.ViewModels;assembly=Engine"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:GameSession}"             
-        Title="SOSCSRPG" Height="768" Width="1024">
+        Title="SOSCSRPG" Height="640" Width="960">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
     </Window.Resources>
