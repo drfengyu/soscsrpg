@@ -56,5 +56,10 @@ namespace SOSCSRPG
         {
             gameSession.MoveEast();
         }
+
+        private void OnClick_AttackMonster(object sender, RoutedEventArgs e)
+        {
+            gameSession.AttackCurrentMonster();
+        }
     }
 }

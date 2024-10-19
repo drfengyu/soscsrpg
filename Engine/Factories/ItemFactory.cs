@@ -24,8 +24,11 @@ namespace Engine.Factories
         }
         public static ShopItem CreateShopItem(int itemTypeID) {
             ShopItem shopItem = shopItems.FirstOrDefault(item => item.ItemTypeID == itemTypeID);
-            if (shopItem==null)
+            if (shopItem!=null)
             {
+                if (shopItem is Weapon) { 
+                    return (shopItem as Weapon).Clone();
+                }
                 return shopItem.Clone();
             }
             return null;

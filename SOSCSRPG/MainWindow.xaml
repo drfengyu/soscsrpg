@@ -159,7 +159,8 @@
                 </TabItem>
             </TabControl>
         </Grid>
-
+        
+        <!--Action controls-->
         <Grid Grid.Row="2" Grid.Column="1" Background="Lavender">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -168,6 +169,27 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="255"/>
             </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Visibility="{Binding HasMonster,Converter={StaticResource BooleanToVisibility}}"
+                  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Row="0" Grid.Column="0"
+                          ItemsSource="{Binding CurrentPlayer.Weapons}"
+                          SelectedItem="{Binding CurrentWeapon}"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="ID"/>
+                <Button Grid.Row="0" Grid.Column="2"
+                        Content="Use"
+                        Click="OnClick_AttackMonster"/>
+            </Grid>
+            <!--Move Controls-->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -179,19 +201,18 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="1" Content="North" Height="25" Width="65" Margin="10"
+                <AduSkin:AduFlatButton Grid.Row="0" Grid.Column="1" Content="North" Height="25" Width="65" Margin="10"
                     Click="OnClick_MoveNorth"
                     Visibility="{Binding HasLocationToNorth,Converter={StaticResource BooleanToVisibility}}"/>
-                <Button Grid.Row="2" Grid.Column="1" Content="South" Height="25" Width="65" Margin="10"
+                <AduSkin:AduFlatButton Grid.Row="2" Grid.Column="1" Content="South" Height="25" Width="65" Margin="10"
                     Click="OnClick_MoveSouth"
                     Visibility="{Binding HasLocationToSouth,Converter={StaticResource BooleanToVisibility}}"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="West" Height="25" Width="65" Margin="10"
+                <AduSkin:AduFlatButton Grid.Row="1" Grid.Column="0" Content="West" Height="25" Width="65" Margin="10"
                     Click="OnClick_MoveWest"
                     Visibility="{Binding HasLocationToWest,Converter={StaticResource BooleanToVisibility}}"/>
-                <Button Grid.Row="1" Grid.Column="2" Content="East" Height="25" Width="65" Margin="10"
+                <AduSkin:AduFlatButton Grid.Row="1" Grid.Column="2" Content="East" Height="25" Width="65" Margin="10"
                     Click="OnClick_MoveEast"
                     Visibility="{Binding HasLocationToEast,Converter={StaticResource BooleanToVisibility}}"/>
-                <!--<Label Grid.Row="2" Grid.Column="1" Content="Combat/Movement Controls" Background="Lavender"/>-->
             </Grid>
         </Grid>
     </Grid>
