@@ -1,4 +1,5 @@
-﻿using Engine.Factories;
+﻿using Engine.EventArgs;
+using Engine.Factories;
 using Engine.Models;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,10 @@ namespace Engine.ViewModels
     /// <summary>
     /// 202410150952 检查当前位置任务可用状态
     /// </summary>
-    public class GameSession:BaseNotificationClass
+    public class Session:BaseNotificationClass
     {
+        public event EventHandler<MessageEventArgs> OnMessageRaised;
+
         private Location currentLocation;
         private Monster currentMonster;
 
@@ -36,10 +39,18 @@ namespace Engine.ViewModels
             set { currentMonster = value;
                 OnPropertyChanged(nameof(CurrentMonster));
                 OnPropertyChanged(nameof(HasMonster));
+                if (CurrentMonster != null) { 
+                    RaiseMessage("");
+                    RaiseMessage($"You see a {CurrentMonster.Name} here.");
+                }
             }
         }
 
+        public Weapon CurrentWeapon { get; set; }
+
         public bool HasMonster => CurrentMonster != null;
+
+       
 
         public bool HasLocationToNorth { 
             get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; }
@@ -60,7 +71,7 @@ namespace Engine.ViewModels
        
 
         public World CurrentWorld { set; get; }
-        public GameSession() {
+        public Session() {
             CurrentPlayer = new Player
             {
                 Name = "Scott",
@@ -74,9 +85,9 @@ namespace Engine.ViewModels
 
             CurrentWorld=WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
+            /CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
+            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
+            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
         }
 
         
@@ -124,6 +135,9 @@ namespace Engine.ViewModels
             CurrentMonster = CurrentLocation.GetMonster();
         }
 
-
+        private void RaiseMessage(string message)
+        {
+            OnMessageRaised?.Invoke(this, new MessageEventArgs(message));
+        }
     }
 }

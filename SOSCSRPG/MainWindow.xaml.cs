@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AduSkin.Controls.Metro;
+using Engine.EventArgs;
 using Engine.ViewModels;
 namespace SOSCSRPG
 {
@@ -21,12 +22,19 @@ namespace SOSCSRPG
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private GameSession gameSession;
+        private Session gameSession;
         public MainWindow()
         {
             InitializeComponent();
-            gameSession = new GameSession();
+            gameSession = new Session();
+            gameSession.OnMessageRaised+= OnMessageRaised;
             DataContext=gameSession;
+        }
+
+        private void OnMessageRaised(object sender, MessageEventArgs e)
+        {
+            GameMessages.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
+            GameMessages.ScrollToEnd();
         }
 
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
