@@ -61,5 +61,13 @@ namespace SOSCSRPG
         {
             gameSession.AttackCurrentMonster();
         }
+
+        private void OnClick_DisplayTradeScreen(object sender, RoutedEventArgs e)
+        {
+            TraderScreen tradeScreen = new TraderScreen();
+            tradeScreen.Owner = this;
+            tradeScreen.DataContext = gameSession;
+            tradeScreen.ShowDialog();
+        }
     }
 }
