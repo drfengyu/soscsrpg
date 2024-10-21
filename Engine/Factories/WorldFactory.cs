@@ -30,6 +30,7 @@ namespace Engine.Factories
                 Description = "This is the house of your neighbor, Farmer Ted.",
                 ImageName = "/Engine;component/Images/Locations/Farmhouse.png"
             });
+            world.LocationAt(-1, -1).TraderHere = TraderFactory.GetTraderByName("Farmer Ted");
             world.AddLocation(new Location()
             {
                 XCoordinate = 0,
@@ -46,6 +47,7 @@ namespace Engine.Factories
                 Description = "The shop of Susan, the trader.",
                 ImageName = "/Engine;component/Images/Locations/Trader.png"
             });
+            world.LocationAt(-1, 0).TraderHere = TraderFactory.GetTraderByName("Susan");
             world.AddLocation(new Location()
 
             {
@@ -81,6 +83,7 @@ namespace Engine.Factories
                 ImageName = "/Engine;component/Images/Locations/HerbalistsHut.png"
             });
             world.LocationAt(0, 1).QuestsAvailableHere.Add(QuestFactory.GetQuestByID(1));
+            world.LocationAt(0,1).TraderHere= TraderFactory.GetTraderByName("Pete the Herbalist");
             world.AddLocation(new Location()
             {
                 XCoordinate = 0,

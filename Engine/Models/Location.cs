@@ -23,6 +23,7 @@ namespace Engine.Models
         public List<Quest> QuestsAvailableHere { get; set; } = new List<Quest>();
 
         public List<MonsterEncounter> MonstersHere { get; set; } = new List<MonsterEncounter>();
+        public Trader TraderHere { get; set; }
 
         public void AddMonster(int monsterID, int chanceOfEncountering) {
             if (MonstersHere.Exists(m=>m.MonsterID==monsterID))
@@ -40,10 +41,12 @@ namespace Engine.Models
             {
                 return null;
             }
+            //Total the percentages of all monsters at this location
             int totalChances = MonstersHere.Sum(m => m.ChanceOfEncountering);
-
+            //Select a random number between 1 and the total(in case the total chances is not 100).
             int randomNumber=RandomNumberGenerator.NumberBetween(1,totalChances);
-
+            //Loop through the monster list,
+            //adding the monster's percentage chance of appearing to the runningtotal varible.
             int runningTotal = 0;
 
             foreach (MonsterEncounter monsterEncounter in MonstersHere)
@@ -53,6 +56,7 @@ namespace Engine.Models
                     return MonsterFactory.GetMonster(monsterEncounter.MonsterID);
                 }
             }
+            //If there was a problem, return the last monster in the list.
             return MonsterFactory.GetMonster(MonstersHere.Last().MonsterID);
         }
     }
