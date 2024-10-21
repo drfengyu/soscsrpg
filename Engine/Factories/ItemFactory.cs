@@ -9,9 +9,9 @@ namespace Engine.Factories
 {
     public static class ItemFactory
     {
-        private static List<ShopItem> shopItems;
+        private static readonly List<ShopItem> shopItems=new List<ShopItem>();
         static ItemFactory() { 
-            shopItems = new List<ShopItem>();
+            //shopItems = new List<ShopItem>();
             shopItems.Add(new Weapon(1001,"Pointy Stick",1,1,2));
             shopItems.Add(new Weapon(1002, "Rusty Sword", 5, 1, 3));
 

@@ -8,7 +8,7 @@ namespace Engine.Models
 {
     public class World
     {
-        private List<Location> Locations = new List<Location>();
+        private readonly List<Location> Locations = new List<Location>();
 
         public void AddLocation(Location location) {
             Locations.Add(location);

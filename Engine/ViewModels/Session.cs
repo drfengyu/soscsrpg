@@ -51,32 +51,19 @@ namespace Engine.ViewModels
 
         public bool HasMonster => CurrentMonster != null;
 
-       
 
-        public bool HasLocationToNorth { 
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; }
-        }
-        public bool HasLocationToSouth
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate-1) != null; }
-        }
-        public bool HasLocationToWest
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate-1, CurrentLocation.YCoordinate) != null; }
-        }
-        public bool HasLocationToEast
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null; }
-        }
 
-       
+        public bool HasLocationToNorth => CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null;
+        public bool HasLocationToSouth => CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1) != null;
+        public bool HasLocationToWest => CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null;
+        public bool HasLocationToEast => CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null;
 
         public World CurrentWorld { set; get; }
         public Session() {
             CurrentPlayer = new Player
             {
                 Name = "Scott",
-                Gold = 100,
+                Gold = 0,
                 CharacterClass = "Fighter",
                 HitPoints = 10,
                 ExperiencePoints = 0,
@@ -87,7 +74,7 @@ namespace Engine.ViewModels
             CurrentWorld=WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
             CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
-            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
+            CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
             //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
         }
 

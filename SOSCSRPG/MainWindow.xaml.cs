@@ -22,7 +22,7 @@ namespace SOSCSRPG
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private Session gameSession;
+        private readonly Session gameSession;
         public MainWindow()
         {
             InitializeComponent();
