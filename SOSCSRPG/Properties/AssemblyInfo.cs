@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("SOSCSRPG")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("P R C")]
+[assembly: AssemblyCompany("drfengling")]
 [assembly: AssemblyProduct("SOSCSRPG")]
 [assembly: AssemblyCopyright("Copyright © P R C 2024")]
 [assembly: AssemblyTrademark("")]

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOSCSRPG", "SOSCSRPG\SOSCSRPG.csproj", "{CF1EB38B-61A8-44C0-AAAF-418F801809BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F242CCF5-520A-4115-91A6-FA71A8F27C3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,12 +23,16 @@ Global
 		{CF1EB38B-61A8-44C0-AAAF-418F801809BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF1EB38B-61A8-44C0-AAAF-418F801809BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF1EB38B-61A8-44C0-AAAF-418F801809BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F242CCF5-520A-4115-91A6-FA71A8F27C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F242CCF5-520A-4115-91A6-FA71A8F27C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F242CCF5-520A-4115-91A6-FA71A8F27C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F242CCF5-520A-4115-91A6-FA71A8F27C3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {51222350-2B88-442C-9D29-E7BB1CFB16F7}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
