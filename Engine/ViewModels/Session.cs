@@ -31,6 +31,7 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToSouth));
                 OnPropertyChanged(nameof(HasLocationToWest));
                 OnPropertyChanged(nameof(HasLocationToEast));
+                CompleteQuestsAtLocation();
                 GivePlayerQuestsAtLocation();
                 GetMonsterAtLocation();
             }
@@ -70,11 +71,14 @@ namespace Engine.ViewModels
                 Level = 1,
                 
             };
-
-            CurrentWorld=WorldFactory.CreateWorld();
+            if (!CurrentPlayer.Weapons.Any())
+            {
+                CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(1001));
+            }
+            CurrentWorld =WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
+            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
+            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
             //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
         }
 
@@ -114,6 +118,57 @@ namespace Engine.ViewModels
                 if (!CurrentPlayer.Quests.Any(q=>q.PlayerQuest.ID==quest.ID))
                 {
                     CurrentPlayer.Quests.Add(new QuestStatus(quest));
+                    RaiseMessage("");
+                    RaiseMessage($"you found a quest: {quest.Name}");
+                    RaiseMessage(quest.Description);
+                    RaiseMessage("Return with:");
+                    foreach (ItemQuantity itemQuantity in quest.ItemsToComplete)
+                    {
+                        RaiseMessage($"{itemQuantity.Quantity} {ItemFactory.CreateShopItem(itemQuantity.ItemID).Name}");
+                    }
+                    RaiseMessage("And you will receive:");
+                    RaiseMessage($"{quest.RewardExperiencePoints} experience points");
+                    RaiseMessage($"{quest.RewardGold} gold");
+                    foreach (ItemQuantity itemQuantity in quest.RewardItems) {
+                        RaiseMessage($"{itemQuantity.Quantity} {ItemFactory.CreateShopItem(itemQuantity.ItemID).Name}");
+                    }
+                }
+            }
+        }
+
+        private void CompleteQuestsAtLocation() {
+            foreach (Quest quest in CurrentLocation.QuestsAvailableHere)
+            {
+                QuestStatus questToComplete=CurrentPlayer.Quests.FirstOrDefault(q => q.PlayerQuest.ID == quest.ID
+                && !q.IsCompleted);
+                if (questToComplete != null) {
+                    if (CurrentPlayer.HasAllTheseItems(quest.ItemsToComplete)) {
+                        //Remove the quest completion items from the player's inventory
+                        foreach (ItemQuantity itemQuantity in quest.ItemsToComplete)
+                            {
+                                for (int i = 0; i < itemQuantity.Quantity; i++) {
+                                    CurrentPlayer.RemoveItemFromInventory(
+                                        CurrentPlayer.Inventory.First(item=>item.ItemTypeID==itemQuantity.ItemID));
+                                }
+                            }
+                            RaiseMessage("");
+                            RaiseMessage($"You complete the '{quest.Name}' quest.");
+                            //Give the player the quest rewards
+                            CurrentPlayer.ExperiencePoints+=quest.RewardExperiencePoints;
+                            RaiseMessage($"You receive {quest.RewardExperiencePoints} experience points.");
+                            CurrentPlayer.Gold += quest.RewardGold;
+                            RaiseMessage($"You receive {quest.RewardGold} gold.");
+
+                            foreach (ItemQuantity itemQuantity in quest.RewardItems) 
+                            {
+                                ShopItem rewardItem= ItemFactory.CreateShopItem(itemQuantity.ItemID);
+                                CurrentPlayer.AddItemToInventory(rewardItem);
+                                RaiseMessage($"You receive a {rewardItem.Name}.");
+                            }
+                            //Mark the Quest as completed
+                            questToComplete.IsCompleted= true;
+                        
+                    }
                 }
             }
         }
