@@ -14,6 +14,7 @@ namespace Engine.Models
         private int currentHitPoints;
         private int maximumHitPoints;
         private int gold;
+        private int level;
 
         public string Name { get => name; set { name = value; OnPropertyChanged(nameof(Name)); } }
         public int CurrentHitPoints { get => currentHitPoints; set { currentHitPoints = value;OnPropertyChanged(nameof(CurrentHitPoints)); } }
@@ -21,17 +22,24 @@ namespace Engine.Models
         public int MaximumHitPoints { get => maximumHitPoints; set { maximumHitPoints = value; OnPropertyChanged(nameof(MaximumHitPoints)); } }
 
         public int Gold { get => gold; set { gold = value; OnPropertyChanged(nameof(Gold)); } }
+
+        public int Level { get => level;protected set { 
+                level = value; 
+                OnPropertyChanged(nameof(Level));
+            } }
+
         public ObservableCollection<ShopItem> Inventory { get; set; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; set; }
         public List<ShopItem> Weapons=>Inventory.Where(i=>i is Weapon).ToList();
         public bool isDead=>CurrentHitPoints<=0;
         #endregion
         public event EventHandler OnKilled;
-        protected LivingEntity(string name,int maximumHitPoints,int currentHitPoints,int gold) {
+        protected LivingEntity(string name,int maximumHitPoints,int currentHitPoints,int gold,int level=1) {
                 this.name = name;
                 this.maximumHitPoints = maximumHitPoints;
                 this.currentHitPoints = currentHitPoints;
                 this.gold = gold;
+                this.Level = level;
                 Inventory = new ObservableCollection<ShopItem>();   
                 GroupedInventory = new ObservableCollection<GroupedInventoryItem>();
         }
