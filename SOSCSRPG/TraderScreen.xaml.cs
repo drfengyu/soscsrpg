@@ -29,13 +29,13 @@ namespace SOSCSRPG
 
         private void OnClick_Buy(object sender, RoutedEventArgs e)
         {
-            ShopItem item=((FrameworkElement)sender).DataContext as ShopItem;
+            GroupedInventoryItem item=((FrameworkElement)sender).DataContext as GroupedInventoryItem;
             if (item != null) {
-                if (Session.CurrentPlayer.Gold >= item.Price)
+                if (Session.CurrentPlayer.Gold >= item.Item.Price)
                 {
-                    Session.CurrentPlayer.Gold -= item.Price;
-                    Session.CurrentTrader.RemoveItemFromInventory(item);
-                    Session.CurrentPlayer.AddItemToInventory(item);
+                    Session.CurrentPlayer.Gold -= item.Item.Price;
+                    Session.CurrentTrader.RemoveItemFromInventory(item.Item);
+                    Session.CurrentPlayer.AddItemToInventory(item.Item);
                 }
                 else
                 {
@@ -51,12 +51,12 @@ namespace SOSCSRPG
 
         private void OnClick_Sell(object sender, RoutedEventArgs e)
         {
-            ShopItem item=((FrameworkElement)sender).DataContext as ShopItem;
+            GroupedInventoryItem item=((FrameworkElement)sender).DataContext as GroupedInventoryItem;
             if (item!=null)
             {
-                Session.CurrentPlayer.Gold+=item.Price;
-                Session.CurrentTrader.AddItemToInventory(item);
-                Session.CurrentPlayer.RemoveItemFromInventory(item);
+                Session.CurrentPlayer.Gold+=item.Item.Price;
+                Session.CurrentTrader.AddItemToInventory(item.Item);
+                Session.CurrentPlayer.RemoveItemFromInventory(item.Item);
             }
         }
     }
