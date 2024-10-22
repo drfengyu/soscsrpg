@@ -31,16 +31,16 @@ namespace SOSCSRPG
         {
             GroupedInventoryItem item=((FrameworkElement)sender).DataContext as GroupedInventoryItem;
             if (item != null) {
-                if (Session.CurrentPlayer.Gold >= item.Item.Price)
-                {
-                    Session.CurrentPlayer.Gold -= item.Item.Price;
+                //if (Session.CurrentPlayer.Gold >= item.Item.Price)
+                //{
+                    Session.CurrentPlayer.SpendGold(item.Item.Price);
                     Session.CurrentTrader.RemoveItemFromInventory(item.Item);
                     Session.CurrentPlayer.AddItemToInventory(item.Item);
-                }
-                else
-                {
-                    MessageBox.Show("You don't have enough gold to buy that!");
-                }
+                //}
+                //else
+                //{
+                //    MessageBox.Show("You don't have enough gold to buy that!");
+                //}
             }
         }
 
@@ -54,7 +54,7 @@ namespace SOSCSRPG
             GroupedInventoryItem item=((FrameworkElement)sender).DataContext as GroupedInventoryItem;
             if (item!=null)
             {
-                Session.CurrentPlayer.Gold+=item.Item.Price;
+                Session.CurrentPlayer.ReceiveGold(item.Item.Price);
                 Session.CurrentTrader.AddItemToInventory(item.Item);
                 Session.CurrentPlayer.RemoveItemFromInventory(item.Item);
             }

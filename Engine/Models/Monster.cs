@@ -16,16 +16,16 @@ namespace Engine.Models
         
         public int RewardExperiencePoints { get; set; }
         
-        public Monster(string name, string imageName, int maximumHitPoints,int hitPoints,int minimumDamage,int maxmumDamage, int rewardExperiencePoints, int rewardGold)
+        public Monster(string name, string imageName, int maximumHitPoints,int currentHitPoints,int minimumDamage,int maxmumDamage, int rewardExperiencePoints, int gold):base(name,maximumHitPoints,currentHitPoints,gold) //base is the parent class
         {
-            Name = name;
+            
             ImageName = string.Format("/Engine;component/Images/Monsters/{0}",imageName);
-            MaximumHitPoints = maximumHitPoints;
-            CurrentHitPoints = hitPoints;
+           
+            
             MinimumDamage = minimumDamage;
             MaximumDamage = maxmumDamage;
             RewardExperiencePoints = rewardExperiencePoints;
-            Gold = rewardGold;
+            
            
         }
     }

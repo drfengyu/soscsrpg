@@ -22,8 +22,22 @@ namespace Engine.ViewModels
         private Location currentLocation;
         private Monster currentMonster;
         private Trader currentTrader;
+        private Player currentPlayer;
 
-        public Player CurrentPlayer { get; set;  }
+        public Player CurrentPlayer { get => currentPlayer;
+            set {
+                if (currentPlayer!=null)
+                {
+                    currentPlayer.OnKilled-=OnCurrentPlayerKilled;
+                }
+                currentPlayer = value;
+                if (currentPlayer != null) { 
+                    currentPlayer.OnKilled += OnCurrentPlayerKilled;    
+                }
+            } }
+
+        
+
         public Location CurrentLocation { get => currentLocation;
             set { 
                 currentLocation = value;
@@ -35,19 +49,30 @@ namespace Engine.ViewModels
                 CompleteQuestsAtLocation();
                 GivePlayerQuestsAtLocation();
                 GetMonsterAtLocation();
+                CurrentTrader=CurrentLocation.TraderHere;
             }
         }
 
         public Monster CurrentMonster { get => currentMonster;
-            set { currentMonster = value;
-                OnPropertyChanged(nameof(CurrentMonster));
-                OnPropertyChanged(nameof(HasMonster));
-                if (CurrentMonster != null) { 
+            set {
+                if (currentMonster != null) { 
+                        currentMonster.OnKilled -= OnCurrentMonsterKilled;
+                }
+                currentMonster = value;
+                if (CurrentMonster != null)
+                {
+                    CurrentMonster.OnKilled += OnCurrentMonsterKilled;
                     RaiseMessage("");
                     RaiseMessage($"You see a {CurrentMonster.Name} here.");
                 }
+                OnPropertyChanged(nameof(CurrentMonster));
+                OnPropertyChanged(nameof(HasMonster));
+                
             }
         }
+
+        
+
         public Trader CurrentTrader { get => currentTrader;
             set
             {
@@ -70,17 +95,8 @@ namespace Engine.ViewModels
         
 
         public Session() {
-            CurrentPlayer = new Player
-            {
-                Name = "Scott",
-                Gold = 0,
-                CharacterClass = "Fighter",
-                CurrentHitPoints = 10,
-                MaximumHitPoints = 10,
-                ExperiencePoints = 0,
-                Level = 1,
-                
-            };
+            CurrentPlayer = new Player("Black Huang","Fighter",0,10,10,0);
+            
             if (!CurrentPlayer.Weapons.Any())
             {
                 CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(1001));
@@ -166,9 +182,9 @@ namespace Engine.ViewModels
                             //Give the player the quest rewards
                             CurrentPlayer.ExperiencePoints+=quest.RewardExperiencePoints;
                             RaiseMessage($"You receive {quest.RewardExperiencePoints} experience points.");
-                            CurrentPlayer.Gold += quest.RewardGold;
+                            CurrentPlayer.ReceiveGold(quest.RewardGold);
                             RaiseMessage($"You receive {quest.RewardGold} gold.");
-
+                            
                             foreach (ItemQuantity itemQuantity in quest.RewardItems) 
                             {
                                 ShopItem rewardItem= ItemFactory.CreateShopItem(itemQuantity.ItemID);
@@ -207,23 +223,24 @@ namespace Engine.ViewModels
             }
             else
             {
-                CurrentMonster.CurrentHitPoints-= damageToMonster;
+                //CurrentMonster.CurrentHitPoints-= damageToMonster;
                 RaiseMessage($"You hit the {CurrentMonster.Name} for {damageToMonster} points.");
+                CurrentMonster.TakeDamage(damageToMonster);
             }
             //If CurrentMonster.HitPoints if killed,collect rewards and loot
-            if (CurrentMonster.CurrentHitPoints <= 0)
+            if (CurrentMonster.isDead)
             {
-                RaiseMessage("");
-                RaiseMessage($"You defeated the {CurrentMonster.Name}!");
-                CurrentPlayer.ExperiencePoints += CurrentMonster.RewardExperiencePoints;
-                RaiseMessage($"You receive {CurrentMonster.RewardExperiencePoints} experience points.");
-                CurrentPlayer.Gold += CurrentMonster.Gold;
-                RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
-                foreach (ShopItem shopItem in CurrentMonster.Inventory)
-                {
-                    CurrentPlayer.AddItemToInventory(shopItem);
-                    RaiseMessage($"You receive one {shopItem.Name}.");
-                }
+                //RaiseMessage("");
+                //RaiseMessage($"You defeated the {CurrentMonster.Name}!");
+                //CurrentPlayer.ExperiencePoints += CurrentMonster.RewardExperiencePoints;
+                //RaiseMessage($"You receive {CurrentMonster.RewardExperiencePoints} experience points.");
+                //CurrentPlayer.Gold += CurrentMonster.Gold;
+                //RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
+                //foreach (ShopItem shopItem in CurrentMonster.Inventory)
+                //{
+                //    CurrentPlayer.AddItemToInventory(shopItem);
+                //    RaiseMessage($"You receive one {shopItem.Name}.");
+                //}
                 //Get another monster to flight
                 GetMonsterAtLocation();
             }
@@ -235,22 +252,51 @@ namespace Engine.ViewModels
                 }
                 else
                 {
-                    CurrentPlayer.CurrentHitPoints -= damageToPlayer;
+                    //CurrentPlayer.CurrentHitPoints -= damageToPlayer;
                     RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
+                    CurrentPlayer.TakeDamage(damageToPlayer);
                 }
                 //If player is killed,move them back to their home.
-                if (CurrentPlayer.CurrentHitPoints <= 0) {
-                    RaiseMessage("");
-                    RaiseMessage($"The {CurrentMonster.Name} killed you.");
-                    CurrentPlayer.ExperiencePoints -= CurrentMonster.RewardExperiencePoints;
-                    RaiseMessage($"You lost {CurrentMonster.RewardExperiencePoints} experience points.");
-                    CurrentPlayer.Gold -= CurrentMonster.Gold;
-                    RaiseMessage($"You lost {CurrentMonster.Gold} gold.");
-                    CurrentLocation = CurrentWorld.LocationAt(0, -1);//Player's home
-                    CurrentPlayer.CurrentHitPoints =CurrentPlayer.Level*10; //Completely heal the player
-                }
+                //if (CurrentPlayer.CurrentHitPoints <= 0) {
+                //    RaiseMessage("");
+                //    RaiseMessage($"The {CurrentMonster.Name} killed you.");
+                //    CurrentPlayer.ExperiencePoints -= CurrentMonster.RewardExperiencePoints;
+                //    RaiseMessage($"You lost {CurrentMonster.RewardExperiencePoints} experience points.");
+                //    CurrentPlayer.Gold -= CurrentMonster.Gold;
+                //    RaiseMessage($"You lost {CurrentMonster.Gold} gold.");
+                //    CurrentLocation = CurrentWorld.LocationAt(0, -1);//Player's home
+                //    CurrentPlayer.CurrentHitPoints =CurrentPlayer.Level*10; //Completely heal the player
+                //}
             }
                     
+        }
+
+        private void OnCurrentPlayerKilled(object sender, System.EventArgs e)
+        {
+            RaiseMessage("");
+            RaiseMessage($"The {CurrentMonster.Name} killed you.");
+            CurrentPlayer.ExperiencePoints -= CurrentMonster.RewardExperiencePoints;
+            RaiseMessage($"You lost {CurrentMonster.RewardExperiencePoints} experience points.");
+            CurrentPlayer.Gold -= CurrentMonster.Gold;
+            RaiseMessage($"You lost {CurrentMonster.Gold} gold.");
+            CurrentLocation = CurrentWorld.LocationAt(0, -1);//Player's home
+            CurrentPlayer.CompletelyHeal();
+            //CurrentPlayer.CurrentHitPoints = CurrentPlayer.Level * 10; //Completely heal the player
+        }
+
+        private void OnCurrentMonsterKilled(object sender, System.EventArgs e)
+        {
+            RaiseMessage("");
+            RaiseMessage($"You defeated the {CurrentMonster.Name}!");
+            CurrentPlayer.ExperiencePoints += CurrentMonster.RewardExperiencePoints;
+            RaiseMessage($"You receive {CurrentMonster.RewardExperiencePoints} experience points.");
+            CurrentPlayer.Gold += CurrentMonster.Gold;
+            RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
+            foreach (ShopItem shopItem in CurrentMonster.Inventory)
+            {
+                CurrentPlayer.AddItemToInventory(shopItem);
+                RaiseMessage($"You receive one {shopItem.Name}.");
+            }
         }
     }
 }

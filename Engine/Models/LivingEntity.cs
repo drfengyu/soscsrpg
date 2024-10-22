@@ -9,6 +9,7 @@ namespace Engine.Models
 {
     public abstract class LivingEntity:BaseNotificationClass
     {
+        #region Properties
         private string name;
         private int currentHitPoints;
         private int maximumHitPoints;
@@ -23,10 +24,54 @@ namespace Engine.Models
         public ObservableCollection<ShopItem> Inventory { get; set; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; set; }
         public List<ShopItem> Weapons=>Inventory.Where(i=>i is Weapon).ToList();
-
-        protected LivingEntity() { 
-                Inventory = new ObservableCollection<ShopItem>();
+        public bool isDead=>CurrentHitPoints<=0;
+        #endregion
+        public event EventHandler OnKilled;
+        protected LivingEntity(string name,int maximumHitPoints,int currentHitPoints,int gold) {
+                this.name = name;
+                this.maximumHitPoints = maximumHitPoints;
+                this.currentHitPoints = currentHitPoints;
+                this.gold = gold;
+                Inventory = new ObservableCollection<ShopItem>();   
                 GroupedInventory = new ObservableCollection<GroupedInventoryItem>();
+        }
+
+        public void TakeDamage(int hitPointsOfDamage) {
+                CurrentHitPoints -= hitPointsOfDamage;
+            if (isDead)
+            {
+                CurrentHitPoints = 0;
+                RaiseOnKilledEvent();
+            }
+        }
+
+        private void RaiseOnKilledEvent()
+        {
+            OnKilled?.Invoke(this,new System.EventArgs());
+        }
+
+        public void Heal(int hitPointsToHeal) { 
+            CurrentHitPoints += hitPointsToHeal;
+            if (CurrentHitPoints > MaximumHitPoints)
+            {
+                CurrentHitPoints= MaximumHitPoints;
+            }
+        }
+
+        public void CompletelyHeal() { 
+               CurrentHitPoints = MaximumHitPoints;
+        }
+
+        public void ReceiveGold(int rewardgold) { 
+            this.Gold += rewardgold;
+        }
+
+        public void SpendGold(int paygold) {
+            if (paygold > Gold) {
+                throw new Exception("{Name} doesn't have enough gold to spend {gold} gold");
+            }
+            Gold -= paygold;
+
         }
 
         public void AddItemToInventory(ShopItem item) { 
