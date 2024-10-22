@@ -91,7 +91,7 @@ namespace Engine.Models
         }
         public void RemoveItemFromInventory(ShopItem item) { 
             Inventory.Remove(item);
-            GroupedInventoryItem groupedInventoryItemToRemove = GroupedInventory.FirstOrDefault(i=>i.Item==item);
+            GroupedInventoryItem groupedInventoryItemToRemove =item.IsUnique?GroupedInventory.FirstOrDefault(i=>i.Item==item):GroupedInventory.FirstOrDefault(i=>i.Item.ItemTypeID==item.ItemTypeID);
             if (groupedInventoryItemToRemove != null) {
                 if (groupedInventoryItemToRemove.Quantity == 1)
                 {
