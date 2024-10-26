@@ -8,10 +8,10 @@ namespace Engine.Models
 {
     public class ShopItem
     {
-        public int ItemTypeID { set; get; }
-        public string Name { set; get; }
-        public int Price { set; get; }
-        public bool IsUnique { get; set; }
+        public int ItemTypeID {  get; }
+        public string Name { get; }
+        public int Price { get; }
+        public bool IsUnique { get; }
 
         public ShopItem(int itemTypeID,string name,int price,bool isUnique = false) {
             ItemTypeID = itemTypeID;

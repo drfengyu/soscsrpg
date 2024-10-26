@@ -10,8 +10,8 @@ namespace Engine.Models
     {
         private readonly List<Location> Locations = new List<Location>();
 
-        public void AddLocation(Location location) {
-            Locations.Add(location);
+        public void AddLocation(int XCoordinate,int YCoordinate, string Name, string Description, string ImageName) {
+            Locations.Add(new Location(XCoordinate,YCoordinate,Name,Description,$"/Engine;component/Images/Locations/{ImageName}"));
         }
 
         public Location LocationAt(int xCoordinate, int yCoordinate) {

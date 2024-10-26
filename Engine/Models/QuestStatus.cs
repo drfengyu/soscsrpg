@@ -9,10 +9,15 @@ namespace Engine.Models
     /// <summary>
     /// 202410150935跟踪任务完成状态
     /// </summary>
-    public class QuestStatus
+    public class QuestStatus:BaseNotificationClass
     {
-        public Quest PlayerQuest { get; set; }
-        public bool IsCompleted { get; set; }
+        private bool isCompleted;
+
+        public Quest PlayerQuest { get; }
+        public bool IsCompleted { get => isCompleted;
+            set { isCompleted = value;
+                OnPropertyChanged();
+            } }
         public QuestStatus(Quest quest) {
             PlayerQuest = quest;
             IsCompleted = false;

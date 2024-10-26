@@ -16,20 +16,20 @@ namespace Engine.Models
         private int gold;
         private int level;
 
-        public string Name { get => name; set { name = value; OnPropertyChanged(nameof(Name)); } }
-        public int CurrentHitPoints { get => currentHitPoints; set { currentHitPoints = value;OnPropertyChanged(nameof(CurrentHitPoints)); } }
+        public string Name { get => name; set { name = value; OnPropertyChanged(); } }
+        public int CurrentHitPoints { get => currentHitPoints; set { currentHitPoints = value;OnPropertyChanged(); } }
 
-        public int MaximumHitPoints { get => maximumHitPoints; set { maximumHitPoints = value; OnPropertyChanged(nameof(MaximumHitPoints)); } }
+        public int MaximumHitPoints { get => maximumHitPoints; set { maximumHitPoints = value; OnPropertyChanged(); } }
 
-        public int Gold { get => gold; set { gold = value; OnPropertyChanged(nameof(Gold)); } }
+        public int Gold { get => gold; set { gold = value; OnPropertyChanged(); } }
 
         public int Level { get => level;protected set { 
                 level = value; 
-                OnPropertyChanged(nameof(Level));
+                OnPropertyChanged();
             } }
 
-        public ObservableCollection<ShopItem> Inventory { get; set; }
-        public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; set; }
+        public ObservableCollection<ShopItem> Inventory { get; }
+        public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
         public List<ShopItem> Weapons=>Inventory.Where(i=>i is Weapon).ToList();
         public bool isDead=>CurrentHitPoints<=0;
         #endregion
