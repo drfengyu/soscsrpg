@@ -97,7 +97,7 @@ namespace Engine.ViewModels
         
 
         public Session() {
-            CurrentPlayer = new Player("Black Huang","Fighter",0,10,10,0);
+            CurrentPlayer = new Player("Black Huang","Fighter",0,10,10,100);
             
             if (!CurrentPlayer.Weapons.Any())
             {
@@ -276,11 +276,13 @@ namespace Engine.ViewModels
         private void OnCurrentPlayerKilled(object sender, System.EventArgs e)
         {
             RaiseMessage("");
-            RaiseMessage($"The {CurrentMonster.Name} killed you.");
-            CurrentPlayer.AddExperience(-CurrentMonster.RewardExperiencePoints);
-            RaiseMessage($"You lost {CurrentMonster.RewardExperiencePoints} experience points.");
-            CurrentPlayer.Gold -= CurrentMonster.Gold;
-            RaiseMessage($"You lost {CurrentMonster.Gold} gold.");
+            RaiseMessage($"You have been killed.");
+            int LostExperiencePoints=RandomNumberGenerator.NumberBetween(5, 100);
+            CurrentPlayer.AddExperience(-LostExperiencePoints);
+            RaiseMessage($"You lost {LostExperiencePoints} experience points.");
+            int LostGold =CurrentPlayer.Gold/RandomNumberGenerator.NumberBetween(2, 10);
+            CurrentPlayer.ReceiveGold(-LostGold);
+            RaiseMessage($"You lost {LostGold} gold.");
             CurrentLocation = CurrentWorld.LocationAt(0, -1);//Player's home
             CurrentPlayer.CompletelyHeal();
             //CurrentPlayer.CurrentHitPoints = CurrentPlayer.Level * 10; //Completely heal the player
