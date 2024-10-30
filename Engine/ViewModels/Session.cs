@@ -60,11 +60,13 @@ namespace Engine.ViewModels
         public Monster CurrentMonster { get => currentMonster;
             set {
                 if (currentMonster != null) { 
+                    currentMonster.OnActionPerformed-= OnCurrentMonsterPerformedAction;
                         currentMonster.OnKilled -= OnCurrentMonsterKilled;
                 }
                 currentMonster = value;
                 if (CurrentMonster != null)
                 {
+                    CurrentMonster.OnActionPerformed += OnCurrentMonsterPerformedAction;
                     CurrentMonster.OnKilled += OnCurrentMonsterKilled;
                     RaiseMessage("");
                     RaiseMessage($"You see a {CurrentMonster.Name} here.");
@@ -225,16 +227,8 @@ namespace Engine.ViewModels
             }
             else { 
                 //If monster is still alive,let the monster attack
-                int damageToPlayer=RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDamage, CurrentMonster.MaximumDamage);
-                if (damageToPlayer == 0) { 
-                    RaiseMessage($"The {CurrentMonster.Name} attacks,but misses you.");
-                }
-                else
-                {
-                    //CurrentPlayer.CurrentHitPoints -= damageToPlayer;
-                    RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
-                    CurrentPlayer.TakeDamage(damageToPlayer);
-                }
+                CurrentMonster.UseCurrentWeaponOn(CurrentPlayer);
+                
                
             }
                     
@@ -256,6 +250,10 @@ namespace Engine.ViewModels
         }
         private void OnCurrentPlayerPerformedAction(object sender, string result) { 
                 RaiseMessage(result);
+        }
+        private void OnCurrentMonsterPerformedAction(object sender, string result)
+        {
+            RaiseMessage(result);
         }
         private void OnCurrentMonsterKilled(object sender, System.EventArgs e)
         {

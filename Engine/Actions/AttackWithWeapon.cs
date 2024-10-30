@@ -32,13 +32,16 @@ namespace Engine.Actions
         }
         public void Execute(LivingEntity actor, LivingEntity target) { 
             int damage=RandomNumberGenerator.NumberBetween(minDamage, maxDamage);
+            string actorName=(actor is Player)?"You":$"{actor.Name.ToLower()}";
+            string targetName = (target is Player) ? "you" : $"{target.Name.ToLower()}";
             if (damage == 0)
             {
-                ReportResult($"You missed the {target.Name.ToLower()}");
+                ReportResult($"{actorName} missed {targetName}");
 
             }
             else { 
-                ReportResult($"You hit the {target.Name.ToLower()} for {damage} damage");
+                ReportResult($"{actorName} hit {targetName} for {damage} point{(damage>1?"s":"")}.");
+                target.TakeDamage(damage);
             }
         }
         private void ReportResult(string message) {
