@@ -28,11 +28,13 @@ namespace Engine.ViewModels
             set {
                 if (currentPlayer!=null)
                 {
+                    currentPlayer.OnActionPerformed-= OnCurrentPlayerPerformedAction;
                     currentPlayer.OnLeveledUp -= OnCurrentPlayerLeveledUp;
                     currentPlayer.OnKilled-=OnCurrentPlayerKilled;
                 }
                 currentPlayer = value;
                 if (currentPlayer != null) { 
+                    currentPlayer.OnActionPerformed += OnCurrentPlayerPerformedAction;
                     currentPlayer.OnLeveledUp += OnCurrentPlayerLeveledUp;
                     currentPlayer.OnKilled += OnCurrentPlayerKilled;    
                 }
@@ -82,7 +84,7 @@ namespace Engine.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasTrader));
             } }
-        public ShopItem CurrentWeapon { get; set; }
+        
 
         public bool HasMonster => CurrentMonster != null;
 
@@ -97,7 +99,7 @@ namespace Engine.ViewModels
         
 
         public Session() {
-            CurrentPlayer = new Player("Black Huang","Fighter",0,10,10,100);
+            CurrentPlayer = new Player("Xiao Yi","Fighter",0,10,10,10);
             
             if (!CurrentPlayer.Weapons.Any())
             {
@@ -105,9 +107,7 @@ namespace Engine.ViewModels
             }
             CurrentWorld =WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
-            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1001));
-            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
-            //CurrentPlayer.Inventory.Add(ItemFactory.CreateShopItem(1002));
+            
         }
 
         
@@ -206,44 +206,21 @@ namespace Engine.ViewModels
             CurrentMonster = CurrentLocation.GetMonster();
         }
 
-        private void RaiseMessage(string message)
-        {
-            OnMessageRaised?.Invoke(this, new MessageEventArgs(message));
-        }
+        
 
         public void AttackCurrentMonster()
         {
-            if (CurrentWeapon==null)
+            if (CurrentPlayer.CurrentWeapon==null)
             {
                 RaiseMessage("You must select a weapon first.to attack");
                 return;
             }
             //Determine damage to monster
-            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentWeapon.MininumDamage,CurrentWeapon.MaxinumDamage);
-            if (damageToMonster == 0) {
-                RaiseMessage($"You miss the {CurrentMonster.Name}.");
-            }
-            else
-            {
-                //CurrentMonster.CurrentHitPoints-= damageToMonster;
-                RaiseMessage($"You hit the {CurrentMonster.Name} for {damageToMonster} points.");
-                CurrentMonster.TakeDamage(damageToMonster);
-            }
-            //If CurrentMonster.HitPoints if killed,collect rewards and loot
+            CurrentPlayer.UseCurrentWeaponOn(CurrentMonster);
+            
             if (CurrentMonster.isDead)
             {
-                //RaiseMessage("");
-                //RaiseMessage($"You defeated the {CurrentMonster.Name}!");
-                //CurrentPlayer.ExperiencePoints += CurrentMonster.RewardExperiencePoints;
-                //RaiseMessage($"You receive {CurrentMonster.RewardExperiencePoints} experience points.");
-                //CurrentPlayer.Gold += CurrentMonster.Gold;
-                //RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
-                //foreach (ShopItem shopItem in CurrentMonster.Inventory)
-                //{
-                //    CurrentPlayer.AddItemToInventory(shopItem);
-                //    RaiseMessage($"You receive one {shopItem.Name}.");
-                //}
-                //Get another monster to flight
+               
                 GetMonsterAtLocation();
             }
             else { 
@@ -258,17 +235,7 @@ namespace Engine.ViewModels
                     RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
                     CurrentPlayer.TakeDamage(damageToPlayer);
                 }
-                //If player is killed,move them back to their home.
-                //if (CurrentPlayer.CurrentHitPoints <= 0) {
-                //    RaiseMessage("");
-                //    RaiseMessage($"The {CurrentMonster.Name} killed you.");
-                //    CurrentPlayer.ExperiencePoints -= CurrentMonster.RewardExperiencePoints;
-                //    RaiseMessage($"You lost {CurrentMonster.RewardExperiencePoints} experience points.");
-                //    CurrentPlayer.Gold -= CurrentMonster.Gold;
-                //    RaiseMessage($"You lost {CurrentMonster.Gold} gold.");
-                //    CurrentLocation = CurrentWorld.LocationAt(0, -1);//Player's home
-                //    CurrentPlayer.CurrentHitPoints =CurrentPlayer.Level*10; //Completely heal the player
-                //}
+               
             }
                     
         }
@@ -287,7 +254,9 @@ namespace Engine.ViewModels
             CurrentPlayer.CompletelyHeal();
             //CurrentPlayer.CurrentHitPoints = CurrentPlayer.Level * 10; //Completely heal the player
         }
-
+        private void OnCurrentPlayerPerformedAction(object sender, string result) { 
+                RaiseMessage(result);
+        }
         private void OnCurrentMonsterKilled(object sender, System.EventArgs e)
         {
             RaiseMessage("");
@@ -306,6 +275,11 @@ namespace Engine.ViewModels
         private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs e)
         {
             RaiseMessage($"You leveled up to level {CurrentPlayer.Level}!");
+        }
+
+        private void RaiseMessage(string message)
+        {
+            OnMessageRaised?.Invoke(this, new MessageEventArgs(message));
         }
     }
 }

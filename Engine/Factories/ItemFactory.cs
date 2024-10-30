@@ -34,8 +34,10 @@ namespace Engine.Factories
         }
         public static void BuildWeapon(int id, string name, int price, int minDamage, int maxDamage)
         {
-            shopItems.Add(new ShopItem(ShopItem.ItemCategory.Weapon, id, name, price, true, minDamage, maxDamage));
-
+            ShopItem weapon = new ShopItem(ShopItem.ItemCategory.Weapon, id, name, price, true);
+            weapon.Action = new Actions.AttackWithWeapon(weapon,minDamage, maxDamage);
+            shopItems.Add(weapon);
+            
         }
     }
 }

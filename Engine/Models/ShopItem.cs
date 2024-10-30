@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Actions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,20 +19,22 @@ namespace Engine.Models
         public int Price { get; }
         public bool IsUnique { get; }
 
-        public int MininumDamage { get; }
-        public int MaxinumDamage { get; }
+        public AttackWithWeapon Action { get; set; }
 
-        public ShopItem(ItemCategory category,int itemTypeID,string name,int price,bool isUnique = false,int minDamage = 0,int maxDamage = 0) {
+        public ShopItem(ItemCategory category,int itemTypeID,string name,int price,bool isUnique = false,AttackWithWeapon action=null) {
             Category = category;
             ItemTypeID = itemTypeID;
             Name = name;
             Price = price;
             IsUnique = isUnique;
-            MininumDamage = minDamage;
-            MaxinumDamage = maxDamage;
+            Action = action;
+        }
+        public void PerformActionOn(LivingEntity actor,LivingEntity target)
+        {
+            Action?.Excute(actor, target);
         }
         public ShopItem Clone() { 
-            return new ShopItem(Category,ItemTypeID, Name, Price,IsUnique,MininumDamage,MaxinumDamage);
+            return new ShopItem(Category,ItemTypeID, Name, Price,IsUnique,Action);
         }
     }
 }

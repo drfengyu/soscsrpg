@@ -15,6 +15,7 @@ namespace Engine.Models
         private int maximumHitPoints;
         private int gold;
         private int level;
+        private ShopItem currentWeapon;
 
         public string Name { get => name; set { name = value; OnPropertyChanged(); } }
         public int CurrentHitPoints { get => currentHitPoints; set { currentHitPoints = value;OnPropertyChanged(); } }
@@ -27,13 +28,25 @@ namespace Engine.Models
                 level = value; 
                 OnPropertyChanged();
             } }
-
+        public ShopItem CurrentWeapon { get => currentWeapon;
+            set {
+                if (currentWeapon != null)
+                {
+                  currentWeapon.Action.OnActionPerformed-=RaiseActionPerformedEvent;
+                }
+                currentWeapon = value;
+                if (currentWeapon != null) { 
+                        currentWeapon.Action.OnActionPerformed += RaiseActionPerformedEvent;
+                }
+                OnPropertyChanged();
+            } }
         public ObservableCollection<ShopItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
         public List<ShopItem> Weapons=>Inventory.Where(i=>i.Category==ShopItem.ItemCategory.Weapon).ToList();
         public bool isDead=>CurrentHitPoints<=0;
         #endregion
         public event EventHandler OnKilled;
+        public event EventHandler<string> OnActionPerformed;
         protected LivingEntity(string name,int maximumHitPoints,int currentHitPoints,int gold,int level=1) {
                 this.name = name;
                 this.maximumHitPoints = maximumHitPoints;
@@ -44,6 +57,9 @@ namespace Engine.Models
                 GroupedInventory = new ObservableCollection<GroupedInventoryItem>();
         }
 
+        public void UseCurrentWeaponOn(LivingEntity target) {
+            CurrentWeapon.PerformActionOn(this,target);
+        }
         public void TakeDamage(int hitPointsOfDamage) {
                 CurrentHitPoints -= hitPointsOfDamage;
             if (isDead)
@@ -57,7 +73,9 @@ namespace Engine.Models
         {
             OnKilled?.Invoke(this,new System.EventArgs());
         }
-
+        private void RaiseActionPerformedEvent(object sender, string result) { 
+            OnActionPerformed?.Invoke(this,result);
+        }
         public void Heal(int hitPointsToHeal) { 
             CurrentHitPoints += hitPointsToHeal;
             if (CurrentHitPoints > MaximumHitPoints)
