@@ -30,7 +30,7 @@ namespace Engine.Models
 
         public ObservableCollection<ShopItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
-        public List<ShopItem> Weapons=>Inventory.Where(i=>i is Weapon).ToList();
+        public List<ShopItem> Weapons=>Inventory.Where(i=>i.Category==ShopItem.ItemCategory.Weapon).ToList();
         public bool isDead=>CurrentHitPoints<=0;
         #endregion
         public event EventHandler OnKilled;

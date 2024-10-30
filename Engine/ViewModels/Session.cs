@@ -82,7 +82,7 @@ namespace Engine.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasTrader));
             } }
-        public Weapon CurrentWeapon { get; set; }
+        public ShopItem CurrentWeapon { get; set; }
 
         public bool HasMonster => CurrentMonster != null;
 
