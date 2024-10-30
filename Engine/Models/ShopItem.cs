@@ -19,9 +19,9 @@ namespace Engine.Models
         public int Price { get; }
         public bool IsUnique { get; }
 
-        public AttackWithWeapon Action { get; set; }
+        public IAction Action { get; set; }
 
-        public ShopItem(ItemCategory category,int itemTypeID,string name,int price,bool isUnique = false,AttackWithWeapon action=null) {
+        public ShopItem(ItemCategory category,int itemTypeID,string name,int price,bool isUnique = false,IAction action=null) {
             Category = category;
             ItemTypeID = itemTypeID;
             Name = name;
@@ -31,7 +31,7 @@ namespace Engine.Models
         }
         public void PerformActionOn(LivingEntity actor,LivingEntity target)
         {
-            Action?.Excute(actor, target);
+            Action?.Execute(actor, target);
         }
         public ShopItem Clone() { 
             return new ShopItem(Category,ItemTypeID, Name, Price,IsUnique,Action);

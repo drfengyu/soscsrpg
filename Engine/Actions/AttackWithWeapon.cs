@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Engine.Actions
 {
-    public class AttackWithWeapon
+    public class AttackWithWeapon:IAction
     {
         private readonly ShopItem weapon;
         private readonly int maxDamage;
@@ -30,7 +30,7 @@ namespace Engine.Actions
             this.maxDamage = maxDamage;
             this.minDamage = minDamage;
         }
-        public void Excute(LivingEntity actor, LivingEntity target) { 
+        public void Execute(LivingEntity actor, LivingEntity target) { 
             int damage=RandomNumberGenerator.NumberBetween(minDamage, maxDamage);
             if (damage == 0)
             {
@@ -44,5 +44,7 @@ namespace Engine.Actions
         private void ReportResult(string message) {
             OnActionPerformed?.Invoke(this,message);
         }
+
+        
     }
 }
