@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Engine.Actions
 {
-    public class Heal : IAction
+    public class Heal :BaseAction,IAction
     {
-        private readonly ShopItem _shopItem;
+        
         public readonly int _hitPointsToHeal;
 
-        public event EventHandler<string> OnActionPerformed;
+        
 
-        public Heal(ShopItem shopItem, int hitPointsToHeal) {
-            if (shopItem.Category != ShopItem.ItemCategory.Consumable) { 
-                throw new ArgumentException($"{shopItem.Name} is not a consumable.");
+        public Heal(ShopItem itemInUse, int hitPointsToHeal):base(itemInUse) {
+            if (itemInUse.Category != ShopItem.ItemCategory.Consumable) { 
+                throw new ArgumentException($"{itemInUse.Name} is not a consumable.");
             }
-            _shopItem = shopItem;
+            
             _hitPointsToHeal = hitPointsToHeal;
 
         }
@@ -31,9 +31,6 @@ namespace Engine.Actions
             target.Heal(_hitPointsToHeal);
         }
 
-        private void ReportResult(string result)
-        {
-            OnActionPerformed?.Invoke(this, result);
-        }
+       
     }
 }

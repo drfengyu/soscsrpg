@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Engine.Actions
 {
-    public class AttackWithWeapon:IAction
+    public class AttackWithWeapon:BaseAction,IAction
     {
-        private readonly ShopItem weapon;
+        
         private readonly int maxDamage;
         private readonly int minDamage;
-        public event EventHandler<string> OnActionPerformed;
-        public AttackWithWeapon(ShopItem shopItem, int minDamage, int maxDamage) {
-            if (shopItem.Category!=ShopItem.ItemCategory.Weapon)
+        
+        public AttackWithWeapon(ShopItem itemInUse, int minDamage, int maxDamage):base(itemInUse) {
+            if (itemInUse.Category!=ShopItem.ItemCategory.Weapon)
             {
-                throw new ArgumentException($"{weapon.Name} is not a weapon");
+                throw new ArgumentException($"{itemInUse.Name} is not a weapon");
             }
             if (minDamage<0)
             {
@@ -26,7 +26,7 @@ namespace Engine.Actions
             if (maxDamage < minDamage) { 
                     throw new ArgumentException("maximumDamage must be larger than minimumDamage");
             }
-            this.weapon = shopItem;
+            
             this.maxDamage = maxDamage;
             this.minDamage = minDamage;
         }
@@ -44,9 +44,7 @@ namespace Engine.Actions
                 target.TakeDamage(damage);
             }
         }
-        private void ReportResult(string message) {
-            OnActionPerformed?.Invoke(this,message);
-        }
+        
 
         
     }
