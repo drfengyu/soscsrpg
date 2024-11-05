@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:Engine.ViewModels;assembly=Engine"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:Session}"             
-        Title="SOSCSRPG" Height="640" Width="960">
+        Title="SOSCSRPG" Height="640" Width="960" Icon="1.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
     </Window.Resources>
@@ -39,19 +39,19 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0" Content="Name:"/>
-            <Label Grid.Row="0" Grid.Column="1" Content="{Binding CurrentPlayer.Name}"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Class:"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="{Binding CurrentPlayer.CharacterClass}"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="Hit points:"/>
-            <Label Grid.Row="2" Grid.Column="1" Content="{Binding CurrentPlayer.CurrentHitPoints}"/>
-            <Label Grid.Row="3" Grid.Column="0" Content="Gold:" />
-            <Label Grid.Row="3" Grid.Column="1" Content="{Binding CurrentPlayer.Gold}"/>
-            <Label Grid.Row="4" Grid.Column="0" Content="XP:"/>
-            <Label Grid.Row="4" Grid.Column="1" Content="{Binding CurrentPlayer.ExperiencePoints}"/>
-            <Label Grid.Row="5" Grid.Column="0" Content="Level:"/>
-            <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentPlayer.Level}"/>
+            <!--<Image Source="1.ico" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="48" Height="48"/>-->
+            <Label Grid.Row="1" Grid.Column="0" Content="Name:"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="{Binding CurrentPlayer.Name}"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Class:"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="{Binding CurrentPlayer.CharacterClass}"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="Hit points:"/>
+            <Label Grid.Row="3" Grid.Column="1" Content="{Binding CurrentPlayer.CurrentHitPoints}"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="Gold:" />
+            <Label Grid.Row="4" Grid.Column="1" Content="{Binding CurrentPlayer.Gold}"/>
+            <Label Grid.Row="5" Grid.Column="0" Content="XP:"/>
+            <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentPlayer.ExperiencePoints}"/>
+            <Label Grid.Row="6" Grid.Column="0" Content="Level:"/>
+            <Label Grid.Row="6" Grid.Column="1" Content="{Binding CurrentPlayer.Level}"/>
             
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1" Background="Beige">
@@ -172,6 +172,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="255"/>
             </Grid.ColumnDefinitions>
+            <!--Combat Controls-->
             <Grid Grid.Row="0" Grid.Column="0" Visibility="{Binding HasMonster,Converter={StaticResource BooleanToVisibility}}"
                   HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
@@ -187,10 +188,21 @@
                           ItemsSource="{Binding CurrentPlayer.Weapons}"
                           SelectedItem="{Binding CurrentPlayer.CurrentWeapon}"
                           DisplayMemberPath="Name"
-                          SelectedValuePath="ID"/>
+                          SelectedValuePath="ItemTypeID"/>
                 <AduSkin:AduFlatButton Grid.Row="0" Grid.Column="2"
-                        Width="65" Height="25" Content="Use" 
+                        Width="65" Height="25" Content="使用" 
                         Click="OnClick_AttackMonster"/>
+
+                <AduSkin:AduComboBox Grid.Row="1" Grid.Column="0" Visibility="{Binding CurrentPlayer.HasConsumable,Converter={StaticResource BooleanToVisibility}}"
+                          ItemsSource="{Binding CurrentPlayer.Consumables}"
+                          SelectedItem="{Binding CurrentPlayer.CurrentConsumable}"
+                          DisplayMemberPath="Name"/>
+                
+                <AduSkin:AduFlatButton Grid.Row="1" Grid.Column="2"
+                                       Visibility="{Binding CurrentPlayer.HasConsumable,Converter={StaticResource BooleanToVisibility}}"
+                                       Content="使用"
+                                       Click="OnClick_UseCurrentConsumable"/>
+
             </Grid>
             <!--Move Controls-->
             <Grid Grid.Column="1">

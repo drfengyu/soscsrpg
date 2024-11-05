@@ -16,6 +16,7 @@ namespace Engine.Models
         private int gold;
         private int level;
         private ShopItem currentWeapon;
+        private ShopItem currentConsumable;
 
         public string Name { get => name; set { name = value; OnPropertyChanged(); } }
         public int CurrentHitPoints { get => currentHitPoints; set { currentHitPoints = value;OnPropertyChanged(); } }
@@ -40,10 +41,28 @@ namespace Engine.Models
                 }
                 OnPropertyChanged();
             } }
+
+        public ShopItem CurrentConsumable { get => currentConsumable;
+            set {
+                if (currentConsumable != null) {
+                    currentConsumable.Action.OnActionPerformed -= RaiseActionPerformedEvent;
+                }
+
+                currentConsumable = value;
+                if (currentConsumable!=null)
+                {
+                    currentConsumable.Action.OnActionPerformed+= RaiseActionPerformedEvent;
+                }
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<ShopItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
         public List<ShopItem> Weapons=>Inventory.Where(i=>i.Category==ShopItem.ItemCategory.Weapon).ToList();
+        
+        public List<ShopItem> Consumables=>Inventory.Where(i=>i.Category==ShopItem.ItemCategory.Consumable).ToList();
         public bool isDead=>CurrentHitPoints<=0;
+        public bool HasConsumable => Consumables.Any();
         #endregion
         public event EventHandler OnKilled;
         public event EventHandler<string> OnActionPerformed;
@@ -60,6 +79,11 @@ namespace Engine.Models
         public void UseCurrentWeaponOn(LivingEntity target) {
             CurrentWeapon.PerformActionOn(this,target);
         }
+
+        public void UseCurrentConsumable() { 
+            CurrentConsumable.PerformActionOn(this,this);
+            RemoveItemFromInventory(CurrentConsumable);
+        }
         public void TakeDamage(int hitPointsOfDamage) {
                 CurrentHitPoints -= hitPointsOfDamage;
             if (isDead)
@@ -68,7 +92,7 @@ namespace Engine.Models
                 RaiseOnKilledEvent();
             }
         }
-
+        
         private void RaiseOnKilledEvent()
         {
             OnKilled?.Invoke(this,new System.EventArgs());

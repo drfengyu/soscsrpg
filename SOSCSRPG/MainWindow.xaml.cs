@@ -69,5 +69,10 @@ namespace SOSCSRPG
             tradeScreen.DataContext = gameSession;
             tradeScreen.ShowDialog();
         }
+
+        private void OnClick_UseCurrentConsumable(object sender, RoutedEventArgs e)
+        {
+             gameSession.UseCurrentConsumable();
+        }
     }
 }

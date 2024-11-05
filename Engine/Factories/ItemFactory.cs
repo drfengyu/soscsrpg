@@ -1,4 +1,5 @@
-﻿using Engine.Models;
+﻿using Engine.Actions;
+using Engine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Engine.Factories
             BuildWeapon(1501,"Snake fangs",0,0,2);
             BuildWeapon(1502, "Rat claws", 0, 0, 2);
             BuildWeapon(1503, "Spider fangs", 0, 0, 4);
-
+            BuildHealingItem(2001,"Spider fangs",5,2);
             BuildMiscellaneousItem(9001, "Snake fang", 1);
             BuildMiscellaneousItem(9002, "Snakeskin", 2);
             BuildMiscellaneousItem(9003, "Rat tail", 1);
@@ -26,6 +27,14 @@ namespace Engine.Factories
             BuildMiscellaneousItem(9005, "Spider fang", 1);
             BuildMiscellaneousItem(9006, "Spider silk", 2);
         }
+
+        private static void BuildHealingItem(int id, string name, int price, int hitPointsToHeal)
+        {
+            ShopItem item = new ShopItem(ShopItem.ItemCategory.Consumable,id,name,price);
+            item.Action = new Heal(item,hitPointsToHeal);
+            shopItems.Add(item);
+        }
+
         public static ShopItem CreateShopItem(int itemTypeID)
         {
             return shopItems.FirstOrDefault(item => item.ItemTypeID == itemTypeID)?.Clone();

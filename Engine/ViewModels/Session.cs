@@ -107,6 +107,7 @@ namespace Engine.ViewModels
             {
                 CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(1001));
             }
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(2001));
             CurrentWorld =WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
             
@@ -247,6 +248,9 @@ namespace Engine.ViewModels
             CurrentLocation = CurrentWorld.LocationAt(0, -1);//Player's home
             CurrentPlayer.CompletelyHeal();
             //CurrentPlayer.CurrentHitPoints = CurrentPlayer.Level * 10; //Completely heal the player
+        }
+        public void UseCurrentConsumable() {
+            CurrentPlayer.UseCurrentConsumable();
         }
         private void OnCurrentPlayerPerformedAction(object sender, string result) { 
                 RaiseMessage(result);

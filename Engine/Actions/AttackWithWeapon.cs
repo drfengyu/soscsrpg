@@ -14,8 +14,8 @@ namespace Engine.Actions
         private readonly int maxDamage;
         private readonly int minDamage;
         public event EventHandler<string> OnActionPerformed;
-        public AttackWithWeapon(ShopItem shopItem, int maxDamage, int minDamage) {
-            if (weapon.Category!=ShopItem.ItemCategory.Weapon)
+        public AttackWithWeapon(ShopItem shopItem, int minDamage, int maxDamage) {
+            if (shopItem.Category!=ShopItem.ItemCategory.Weapon)
             {
                 throw new ArgumentException($"{weapon.Name} is not a weapon");
             }
