@@ -20,6 +20,10 @@ namespace Engine.Models
         public int Price { get; }
         public bool IsUnique { get; }
 
+
+
+
+
         public IAction Action { get; set; }
 
         public ShopItem(ItemCategory category,int itemTypeID,string name,int price,bool isUnique = false,IAction action=null) {

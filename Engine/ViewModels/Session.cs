@@ -108,6 +108,9 @@ namespace Engine.ViewModels
                 CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(1001));
             }
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(2001));
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(2001));
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateShopItem(2001));
+            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
             CurrentWorld =WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0,0);
             
@@ -183,18 +186,18 @@ namespace Engine.ViewModels
                                 }
                             }
                             RaiseMessage("");
-                            RaiseMessage($"You complete the '{quest.Name}' quest.");
+                            RaiseMessage($"你完成了 '{quest.Name}' 委托.");
                             //Give the player the quest rewards
                             CurrentPlayer.AddExperience(quest.RewardExperiencePoints);
-                            RaiseMessage($"You receive {quest.RewardExperiencePoints} experience points.");
+                            RaiseMessage($"你获得了 {quest.RewardExperiencePoints} 经验.");
                             CurrentPlayer.ReceiveGold(quest.RewardGold);
-                            RaiseMessage($"You receive {quest.RewardGold} gold.");
+                            RaiseMessage($"你获得了 {quest.RewardGold} 金.");
                             
                             foreach (ItemQuantity itemQuantity in quest.RewardItems) 
                             {
                                 ShopItem rewardItem= ItemFactory.CreateShopItem(itemQuantity.ItemID);
                                 CurrentPlayer.AddItemToInventory(rewardItem);
-                                RaiseMessage($"You receive a {rewardItem.Name}.");
+                                RaiseMessage($"你收到了一件 {rewardItem.Name}.");
                             }
                             //Mark the Quest as completed
                             questToComplete.IsCompleted= true;
@@ -215,7 +218,7 @@ namespace Engine.ViewModels
         {
             if (CurrentPlayer.CurrentWeapon==null)
             {
-                RaiseMessage("You must select a weapon first.to attack");
+                RaiseMessage("你必须选择一件武器用来攻击");
                 return;
             }
             //Determine damage to monster
@@ -239,9 +242,9 @@ namespace Engine.ViewModels
         {
             RaiseMessage("");
             RaiseMessage($"You have been killed.");
-            int LostExperiencePoints=RandomNumberGenerator.NumberBetween(5, 100);
-            CurrentPlayer.AddExperience(-LostExperiencePoints);
-            RaiseMessage($"You lost {LostExperiencePoints} experience points.");
+            //int LostExperiencePoints=RandomNumberGenerator.NumberBetween(5, 100);
+            //CurrentPlayer.AddExperience(-LostExperiencePoints);
+            //RaiseMessage($"You lost {LostExperiencePoints} experience points.");
             int LostGold =CurrentPlayer.Gold/RandomNumberGenerator.NumberBetween(2, 10);
             CurrentPlayer.ReceiveGold(-LostGold);
             RaiseMessage($"You lost {LostGold} gold.");
@@ -253,7 +256,7 @@ namespace Engine.ViewModels
             CurrentPlayer.UseCurrentConsumable();
         }
         private void OnCurrentPlayerPerformedAction(object sender, string result) { 
-                RaiseMessage(result);
+            RaiseMessage(result);
         }
         private void OnCurrentMonsterPerformedAction(object sender, string result)
         {

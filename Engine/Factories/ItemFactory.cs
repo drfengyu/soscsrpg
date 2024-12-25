@@ -14,12 +14,18 @@ namespace Engine.Factories
         static ItemFactory()
         {
             //shopItems = new List<ShopItem>();
-            BuildWeapon(1001, "Pointy Stick", 10, 1, 2);
+            BuildWeapon(1001, "棍子", 10, 1, 2);
             BuildWeapon(1002, "Rusty Sword", 20, 1, 3);
             BuildWeapon(1501,"Snake fangs",0,0,2);
             BuildWeapon(1502, "Rat claws", 0, 0, 2);
             BuildWeapon(1503, "Spider fangs", 0, 0, 4);
-            BuildHealingItem(2001,"Spider fangs",5,2);
+
+            BuildHealingItem(2001, "格兰诺拉麦片条", 5,2);
+
+            BuildMiscellaneousItem(3001,"燕麦",1);
+            BuildMiscellaneousItem(3002,"蜂蜜",2);
+            BuildMiscellaneousItem(3003,"葡萄干",2);
+
             BuildMiscellaneousItem(9001, "Snake fang", 1);
             BuildMiscellaneousItem(9002, "Snakeskin", 2);
             BuildMiscellaneousItem(9003, "Rat tail", 1);

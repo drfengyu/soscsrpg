@@ -10,7 +10,7 @@ namespace TestEngine.ViewModels
         [TestMethod]
         public void TestCreateSession()
         {
-           Session session = new Session();
+            Session session = new Session();
             Assert.IsNotNull(session.CurrentPlayer);
             Assert.AreEqual("Town square",session.CurrentLocation.Name);
 

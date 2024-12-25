@@ -138,6 +138,7 @@ namespace Engine.Models
                 GroupedInventory.First(i => i.Item.ItemTypeID == item.ItemTypeID).Quantity++;
             }
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
         }
         public void RemoveItemFromInventory(ShopItem item) { 
             Inventory.Remove(item);
@@ -152,6 +153,7 @@ namespace Engine.Models
                 }
             }
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
         }
     }
 }
